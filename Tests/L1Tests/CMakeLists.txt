@@ -25,7 +25,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(${NAMESPACE}Plugins REQUIRED)
 
 set (TEST_SRC
-    tests/test_UtilsFile.cpp
 )
 
 set (TEST_LIB
@@ -102,7 +101,7 @@ macro(add_plugin_test plugin_name test_files)
 endmacro()
 
 # PLUGIN_LINEARPLAYBACKCONTROL
-set (LINEARPLAYBACKCONTROL_INC ${CMAKE_SOURCE_DIR}/../entservices-linearplaybackcontrol/LinearPlaybackControl ${CMAKE_SOURCE_DIR}/../entservices-linearplaybackcontrol/helpers)
+set (LINEARPLAYBACKCONTROL_INC ${CMAKE_SOURCE_DIR}/../../plugin ${CMAKE_SOURCE_DIR}/../../helpers)
 add_plugin_test_ex(PLUGIN_LINEARPLAYBACKCONTROL tests/test_LinearPlaybackControl.cpp "${LINEARPLAYBACKCONTROL_INC}" "${NAMESPACE}LinearPlaybackControl")
 
 include_directories(${TEST_INC})
