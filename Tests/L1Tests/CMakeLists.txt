@@ -31,7 +31,7 @@ set (TEST_LIB
     ${NAMESPACE}Plugins::${NAMESPACE}Plugins
 )
 
-set (TEST_INC ../../helpers)
+set (TEST_INC)
 
 #########################################################################################
 # add_plugin_test_ex: Macro to add plugin tests, it will append to TEST_SRC, TEST_INC,
@@ -101,8 +101,10 @@ macro(add_plugin_test plugin_name test_files)
 endmacro()
 
 # PLUGIN_LINEARPLAYBACKCONTROL
-set (LINEARPLAYBACKCONTROL_INC ${CMAKE_SOURCE_DIR}/../../plugin ${CMAKE_SOURCE_DIR}/../../helpers)
+set (LINEARPLAYBACKCONTROL_INC ${CMAKE_SOURCE_DIR}/plugin)
 add_plugin_test_ex(PLUGIN_LINEARPLAYBACKCONTROL tests/test_LinearPlaybackControl.cpp "${LINEARPLAYBACKCONTROL_INC}" "${NAMESPACE}LinearPlaybackControl")
+
+add_library(${MODULE_NAME} SHARED ${TEST_SRC})
 
 include_directories(${TEST_INC})
 
