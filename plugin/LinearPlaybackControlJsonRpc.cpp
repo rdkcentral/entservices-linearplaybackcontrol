@@ -22,6 +22,7 @@
 #include <interfaces/json/JsonData_LinearPlaybackControl.h>
 #include <inttypes.h>
 #include <fstream>
+#include <stdio.h>
 
 namespace WPEFramework {
 
@@ -89,6 +90,7 @@ namespace Plugin {
         }
 
         syslog(LOG_ERR, "Invoked LinearPlaybackControl::endpoint_set_channel");
+        printf("Test coverity workflow %s");
         return callDemuxer(demuxerId,
                            [&](IDemuxer* dmx)->uint32_t {
                                return DmxStatusToCoreStatus(dmx->setChannel(params.Channel.Value()));
