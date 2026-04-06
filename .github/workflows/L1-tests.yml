@@ -18,6 +18,7 @@ env:
   INTERFACES_REF: "develop"
   AUTOMATICS_UNAME: ${{ secrets.AUTOMATICS_UNAME}}
   AUTOMATICS_PASSCODE: ${{ secrets. AUTOMATICS_PASSCODE}}
+  ENABLE_CACHE: "false"
 
 jobs:
   L1-tests:
@@ -41,7 +42,7 @@ jobs:
         # https://github.com/actions/cache
         # https://docs.github.com/en/rest/actions/cache
         # Modify the key if changing the list.
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT && env.ENABLE_CACHE == 'true' }}
         id: cache
         uses: actions/cache@v3
         with:
@@ -123,7 +124,7 @@ jobs:
         with:
           repository: rdkcentral/entservices-testframework
           path: entservices-testframework
-          ref: feature/MD_test
+          ref: workflow_L1_L2-Test
           token: ${{ secrets.RDKCM_RDKE }}
 
       - name: Checkout entservices-linearplaybackcontrol
@@ -138,7 +139,7 @@ jobs:
         with:
           repository: rdkcentral/entservices-linearplaybackcontrol
           path: entservices-linearplaybackcontrol
-          ref: feature/RDKEMW-13563
+          ref: develop
 
       - name: Checkout googletest
         uses: actions/checkout@v3
