@@ -124,8 +124,7 @@ jobs:
         with:
           repository: rdkcentral/entservices-testframework
           path: entservices-testframework
-          ref: workflow_L1_L2-Test
-          token: ${{ secrets.RDKCM_RDKE }}
+          ref: 1.0.1
 
       - name: Checkout entservices-linearplaybackcontrol
         if: ${{ inputs.caller_source == 'local' }}
