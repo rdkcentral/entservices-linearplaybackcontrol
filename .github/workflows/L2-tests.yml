@@ -594,7 +594,6 @@ jobs:
           '*/install/usr/include/*'
           '*/Tests/headers/*'
           '*/Tests/mocks/*'
-          '*/Tests/L2Tests/*'
           '*/googlemock/*'
           '*/googletest/*'
           '*/sqlite/*'
