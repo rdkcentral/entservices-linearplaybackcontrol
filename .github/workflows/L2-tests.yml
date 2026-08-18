@@ -594,6 +594,7 @@ jobs:
           lcov -c
           -o coverage.info
           -d build/entservices-linearplaybackcontrol
+          -d install/usr/lib/wpeframework/plugins
           &&
           lcov
           -r coverage.info
