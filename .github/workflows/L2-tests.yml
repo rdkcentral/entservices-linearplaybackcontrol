@@ -558,15 +558,23 @@ jobs:
         run: >
           PATH=$GITHUB_WORKSPACE/install/usr/bin:${PATH}
           LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install/usr/lib:$GITHUB_WORKSPACE/install/usr/lib/wpeframework/plugins:${LD_LIBRARY_PATH}
+          CONFIG_PATH=$GITHUB_WORKSPACE/install/etc/WPEFramework/plugins
           RdkServicesL2Test &&
           cp -rf $(pwd)/rdkL2TestResults.json $GITHUB_WORKSPACE/rdkL2TestResultsWithoutValgrind.json &&
           rm -rf $(pwd)/rdkL2TestResults.json
+
+      - name: Verify coverage data
+        if: ${{ matrix.coverage == 'with-coverage' && !env.ACT && inputs.caller_source != 'testframework' }}
+        run: |
+          find "$GITHUB_WORKSPACE" -name '*.gcda' -print
+          test -n "$(find "$GITHUB_WORKSPACE" -name '*.gcda' -print -quit)"
 
       - name: Run unit tests with valgrind
         if: ${{ !env.ACT && inputs.caller_source != 'testframework' }}
         run: >
           PATH=$GITHUB_WORKSPACE/install/usr/bin:${PATH}
           LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install/usr/lib:$GITHUB_WORKSPACE/install/usr/lib/wpeframework/plugins:${LD_LIBRARY_PATH}
+          CONFIG_PATH=$GITHUB_WORKSPACE/install/etc/WPEFramework/plugins
           valgrind
           --tool=memcheck
           --log-file=valgrind_log
