@@ -287,6 +287,7 @@ jobs:
           -S "$GITHUB_WORKSPACE/entservices-testframework/Tests/mocks"
           -B build/mocks
           -DBUILD_SHARED_LIBS=ON
+          -DRDK_SERVICE_L2_TEST=ON
           -DCMAKE_TOOLCHAIN_FILE="${{ env.TOOLCHAIN_FILE }}"
           -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/install/usr"
           -DCMAKE_MODULE_PATH="$GITHUB_WORKSPACE/install/tools/cmake"
@@ -558,23 +559,15 @@ jobs:
         run: >
           PATH=$GITHUB_WORKSPACE/install/usr/bin:${PATH}
           LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install/usr/lib:$GITHUB_WORKSPACE/install/usr/lib/wpeframework/plugins:${LD_LIBRARY_PATH}
-          CONFIG_PATH=$GITHUB_WORKSPACE/install/etc/WPEFramework/plugins
           RdkServicesL2Test &&
           cp -rf $(pwd)/rdkL2TestResults.json $GITHUB_WORKSPACE/rdkL2TestResultsWithoutValgrind.json &&
           rm -rf $(pwd)/rdkL2TestResults.json
-
-      - name: Verify coverage data
-        if: ${{ matrix.coverage == 'with-coverage' && !env.ACT && inputs.caller_source != 'testframework' }}
-        run: |
-          find "$GITHUB_WORKSPACE" -name '*.gcda' -print
-          test -n "$(find "$GITHUB_WORKSPACE" -name '*.gcda' -print -quit)"
 
       - name: Run unit tests with valgrind
         if: ${{ !env.ACT && inputs.caller_source != 'testframework' }}
         run: >
           PATH=$GITHUB_WORKSPACE/install/usr/bin:${PATH}
           LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install/usr/lib:$GITHUB_WORKSPACE/install/usr/lib/wpeframework/plugins:${LD_LIBRARY_PATH}
-          CONFIG_PATH=$GITHUB_WORKSPACE/install/etc/WPEFramework/plugins
           valgrind
           --tool=memcheck
           --log-file=valgrind_log
@@ -594,7 +587,6 @@ jobs:
           lcov -c
           -o coverage.info
           -d build/entservices-linearplaybackcontrol
-          -d install/usr/lib/wpeframework/plugins
           &&
           lcov
           -r coverage.info
