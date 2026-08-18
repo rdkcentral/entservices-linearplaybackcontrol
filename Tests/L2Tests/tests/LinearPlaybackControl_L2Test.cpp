@@ -509,9 +509,9 @@ TEST_F(LinearPlaybackControlL2Test, GetStatus_Test) {
     ASSERT_TRUE(verifyFile(statusFilePath, "0,0"))
         << "Invalid or missing status file: " << statusFilePath;
 
-    chmod(seekFilePath.c_str(), 0666);
-    chmod(trickPlayFilePath.c_str(), 0666);
-    chmod(statusFilePath.c_str(), 0666);
+    chmod(seekFilePath.c_str(), 0644);
+    chmod(trickPlayFilePath.c_str(), 0644);
+    chmod(statusFilePath.c_str(), 0644);
 
     // Additional wait to ensure service can read the file
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
