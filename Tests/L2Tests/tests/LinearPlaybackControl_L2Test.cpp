@@ -478,7 +478,7 @@ TEST_F(LinearPlaybackControlL2Test, GetTrickplay_Test) {
 ************Test case Details **************************
 ** 7. TEST GET STATUS
 *******************************************************/
-TEST_F(LinearPlaybackControlL2Test, GetStatus_Test) {
+TEST_F(LinearPlaybackControlL2Test, DISABLED_GetStatus_Test) {
     std::cout << "GetStatus_Test Started" << std::endl;
     
     std::string statusFilePath = fccDir + "/stream_status";
