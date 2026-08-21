@@ -149,6 +149,8 @@ public:
     MOCK_METHOD(const char*, curl_easy_strerror, (CURLcode errornum), (override));
     MOCK_METHOD(CURL*, curl_easy_init, (), (override));
     MOCK_METHOD(void, curl_easy_cleanup, (CURL* handle), (override));
+    MOCK_METHOD(int, fclose, (FILE* stream), (override));
+    MOCK_METHOD(char*, fgets, (char* s, int size, FILE* stream), (override));
 };
 
 // Global test fixture to initialize Wraps::impl
@@ -274,7 +276,7 @@ public:
     std::unique_ptr<DemuxerStreamFsFCC>& demuxer() { return getDemuxer(); }
     bool& streamFSEnabled() { return getStreamFSEnabled(); }
 
-    void AddRef() const override {}
+    uint32_t AddRef() const override { return 0; }
     uint32_t Release() const override { return 0; }
 
     using LinearPlaybackControl::endpoint_set_channel;
@@ -298,7 +300,7 @@ public:
 // Mock IShell
 class MockShell : public WPEFramework::PluginHost::IShell {
 public:
-    MOCK_METHOD(void, AddRef, (), (const, override));
+    MOCK_METHOD(uint32_t, AddRef, (), (const, override));
     MOCK_METHOD(uint32_t, Release, (), (const, override));
     MOCK_METHOD(void*, QueryInterface, (uint32_t id), (override));
     MOCK_METHOD(void, EnableWebServer, (const string& URL, const string& prefix), (override));

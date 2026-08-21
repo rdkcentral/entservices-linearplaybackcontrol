@@ -481,26 +481,37 @@ TEST_F(LinearPlaybackControlL2Test, GetTrickplay_Test) {
 TEST_F(LinearPlaybackControlL2Test, GetStatus_Test) {
     std::cout << "GetStatus_Test Started" << std::endl;
     
-    std::string statusFilePath = fccDir + "/stream_status";
+    const std::string seekFilePath = fccDir + "/seek0";
+    const std::string trickPlayFilePath = fccDir + "/trick_play0";
+    const std::string statusFilePath = fccDir + "/stream_status";
+
+    updateFileInBothLocations("seek0", "0,0,0,0,0");
+    updateFileInBothLocations("trick_play0", "-4");
     updateFileInBothLocations("stream_status", "0,0");
     
     // Wait for file write to be synced
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-    // Verify the file was written correctly
-    std::ifstream verify(statusFilePath);
-    bool fileWritten = false;
-    if (verify.is_open()) {
-        std::string content;
-        std::getline(verify, content);
-        verify.close();
-        if (content == "0,0") {
-            fileWritten = true;
-            chmod(statusFilePath.c_str(), 0666);
+    auto verifyFile = [](const std::string& path, const std::string& expected) {
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            return false;
         }
-    }
-    
-    EXPECT_TRUE(fileWritten) << "Failed to create/update status file: " << statusFilePath;
+        std::string content;
+        std::getline(file, content);
+        return content == expected;
+    };
+
+    ASSERT_TRUE(verifyFile(seekFilePath, "0,0,0,0,0"))
+        << "Invalid or missing seek file: " << seekFilePath;
+    ASSERT_TRUE(verifyFile(trickPlayFilePath, "-4"))
+        << "Invalid or missing trick-play file: " << trickPlayFilePath;
+    ASSERT_TRUE(verifyFile(statusFilePath, "0,0"))
+        << "Invalid or missing status file: " << statusFilePath;
+
+    chmod(seekFilePath.c_str(), 0644);
+    chmod(trickPlayFilePath.c_str(), 0644);
+    chmod(statusFilePath.c_str(), 0644);
 
     // Additional wait to ensure service can read the file
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
